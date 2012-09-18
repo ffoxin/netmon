@@ -32,7 +32,7 @@
 #define STATE_FILE_BASE "/dev/shm/netmon"
 
 /******************************************************************************/
-/* Print last error and exit app                                                                           */
+/* Print last error and exit app                                              */
 /******************************************************************************/
 int exitapp(int exitcode)
 {
@@ -45,6 +45,9 @@ int exitapp(int exitcode)
     return exitcode;
 }
 
+/******************************************************************************/
+/* Main entry point                                                           */
+/******************************************************************************/
 int main(int argc, char** argv)
 {
     if (argc < 2)
@@ -138,8 +141,7 @@ int main(int argc, char** argv)
     }
 
     // store in the file the current values for later use
-    sprintf(buffer, "%019ld\n%019ld\n%019ld\n", 
-        recv_bytes, sent_bytes, nanoseconds);
+    sprintf(buffer, "%019ld\n%019ld\n%019ld\n", recv_bytes, sent_bytes, nanoseconds);
     lseek(fd, 0, SEEK_SET);
     if (write(fd, buffer, 140) == -1)
     {
@@ -151,7 +153,8 @@ int main(int argc, char** argv)
 
     strcpy(buffer, "<txt>");
 
-    bool hasNet = networkAvailable && (prev_nanoseconds >= 0) && (recv_bytes >= prev_recv_bytes) && (sent_bytes >= prev_sent_bytes);
+    bool hasNet = networkAvailable && (prev_nanoseconds >= 0) 
+        && (recv_bytes >= prev_recv_bytes) && (sent_bytes >= prev_sent_bytes);
 
     if (!networkAvailable)
     {

@@ -1,18 +1,27 @@
-CC=g++
-CFLAGS=-c -O3
-LDFLAGS=-lrt
-SOURCES=netmon.cpp strutil.cpp list.cpp netif.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=netmon
+CC = g++
+CFLAGS = -c -O3
+LDFLAGS = -lrt
+INCLUDE = -I
 
-all: $(SOURCES) $(EXECUTABLE)
+BIN_DIR = bin/
+BUILD_DIR = build/
+INC_DIR = inc/
+SRC_DIR = src/
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
-	    
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+BINARY = netmon
+SOURCES = $(shell ls $(SRC_DIR))
+OBJECTS = $(SOURCES:.cpp=.o)
+
+all: $(BINARY)
+
+$(BINARY): $(OBJECTS)
+	$(CC) $(addprefix $(BUILD_DIR),$^) -o $(BIN_DIR)$@ $(LDFLAGS)
+
+%.o: $(SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) $(INCLUDE)$(INC_DIR) $< -o $(BUILD_DIR)$@
+
+.PHONY: clean
 
 clean:
-	rm -rf  *.o netmon
+	rm -rf $(BUILD_DIR)* $(BIN_DIR)*
 
