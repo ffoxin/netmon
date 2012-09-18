@@ -1,0 +1,7 @@
+.gitignore
+*.[oa]
+~
+*.swp
+build
+bin
+
